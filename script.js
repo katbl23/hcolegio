@@ -111,7 +111,6 @@ function updateTable(filteredLoans = loans) {
         <button onclick="toggleReturned(${loan.id})">
           ${loan.returned ? 'Marcar como Pendiente' : 'Marcar como Devuelto'}
         </button>
-        <button onclick="deleteLoan(${loan.id})">Eliminar</button>
       </td>
     `;
 
