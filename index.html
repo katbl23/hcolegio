@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Préstamo de Computadores</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Gestión de Préstamo de Computadores</h1>
+
+  <div class="form-container">
+    <label for="computer">Computador:</label>
+    <select id="computer">
+      <option value="">Selecciona un computador</option>
+      <!-- Opciones de computadores del 1 al 25 generadas dinámicamente -->
+    </select>
+    <label for="user">Usuario:</label>
+    <input type="text" id="user" placeholder="Nombre del usuario">
+    <button id="addLoan">Registrar Préstamo</button>
+  </div>
+
+  <div class="search-container">
+    <label for="search">Buscar:</label>
+    <input type="text" id="search" placeholder="Buscar por usuario o computador">
+  </div>
+
+  <h2>Historial de Préstamos</h2>
+  <table id="loanTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Computador</th>
+        <th>Usuario</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Las filas de préstamos se añadirán aquí -->
+    </tbody>
+  </table>
+
+  <!-- Modal para pedir el código de devolución -->
+  <div id="codeModal" style="display:none;">
+    <label for="returnCode">Código de Devolución:</label>
+    <input type="text" id="returnCode" placeholder="Introduce el código">
+    <button id="confirmReturn">Confirmar</button>
+    <button id="cancelReturn">Cancelar</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
