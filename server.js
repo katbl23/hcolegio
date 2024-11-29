@@ -66,3 +66,4 @@ const port = process.env.PORT || 3000; // El puerto será dinámico si está en 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
+
