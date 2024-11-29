@@ -38,6 +38,7 @@ app.get('/loans', (req, res) => {
       res.status(500).send('Error al obtener los préstamos');
       return;
     }
+    console.log('Préstamos obtenidos:', result.rows); // Verifica que los datos se estén obteniendo
     res.json(result.rows); // En PostgreSQL los resultados se encuentran en result.rows
   });
 });
@@ -47,12 +48,15 @@ app.post('/loans', (req, res) => {
   const { computer, user, date, returned } = req.body;
   const query = 'INSERT INTO loans (computer, user, date, returned) VALUES ($1, $2, $3, $4)';
   
+  console.log('Datos del préstamo recibido:', { computer, user, date, returned }); // Verifica que los datos sean los correctos
+
   db.query(query, [computer, user, date, returned], (err, result) => {
     if (err) {
       console.error('Error al agregar el préstamo:', err);
       res.status(500).send('Error al agregar el préstamo');
       return;
     }
+    console.log('Préstamo agregado exitosamente');
     res.status(201).send('Préstamo agregado');
   });
 });

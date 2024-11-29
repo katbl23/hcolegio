@@ -43,8 +43,10 @@ function addLoan() {
     returned: false,
   };
 
+  console.log('Enviando préstamo al servidor:', newLoan); // Verifica que se envíe correctamente
+
   // Solicitud POST para agregar el préstamo al servidor
-  fetch('/loans', { // Usa una URL relativa
+  fetch('/loans', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newLoan),
@@ -66,6 +68,7 @@ function getLoans() {
   fetch('/loans') // Usa una URL relativa
     .then(response => response.json())
     .then(data => {
+      console.log('Préstamos obtenidos del servidor:', data); // Verifica los datos recibidos
       loans = data;
       updateTable();
     })
