@@ -13,7 +13,9 @@ const cancelReturnButton = document.getElementById('cancelReturn');
 let loans = [];
 let currentLoanId = null;
 
-// Función para generar las opciones de los computadores
+// === FUNCIONES DE LA APLICACIÓN ===
+
+// Función para generar las opciones de los computadores en el select
 function generateComputerOptions() {
   const select = document.getElementById('computer');
   for (let i = 1; i <= 25; i++) {
@@ -26,54 +28,51 @@ function generateComputerOptions() {
 
 // Función para agregar un préstamo a la base de datos
 function addLoan() {
-    const computer = computerInput.value.trim();
-    const user = userInput.value.trim();
-  
-    if (!computer || !user) {
-      alert('Por favor, completa todos los campos.');
-      return;
-    }
-  
-    const newLoan = {
-      computer: computer,
-      user: user,
-      date: new Date().toLocaleString(),
-      returned: false,
-    };
-  
-    // Hacer una solicitud POST para agregar el préstamo al servidor
-    fetch('http://localhost:3000/loans', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newLoan),
+  const computer = computerInput.value.trim();
+  const user = userInput.value.trim();
+
+  if (!computer || !user) {
+    alert('Por favor, completa todos los campos.');
+    return;
+  }
+
+  const newLoan = {
+    computer: computer,
+    user: user,
+    date: new Date().toLocaleString(),
+    returned: false,
+  };
+
+  // Solicitud POST para agregar el préstamo al servidor
+  fetch('/loans', { // Usa una URL relativa
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newLoan),
+  })
+    .then(response => response.json())
+    .then(() => {
+      computerInput.value = '';
+      userInput.value = '';
+      alert('Préstamo registrado con éxito');
+      getLoans(); // Obtener la lista actualizada de préstamos
     })
-      .then(response => response.json())
-      .then(() => {
-        computerInput.value = '';
-        userInput.value = '';
-        alert('Préstamo registrado con éxito');
-        getLoans(); // Obtener la lista actualizada de préstamos
-      })
-      .catch(error => {
-        console.error('Error al registrar el préstamo:', error);
-      });
-  }
-  
-  // Función para obtener todos los préstamos desde el servidor
-  function getLoans() {
-    fetch('http://localhost:3000/loans')
-      .then(response => response.json())
-      .then(data => {
-        loans = data;
-        updateTable();
-      })
-      .catch(error => {
-        console.error('Error al obtener los préstamos:', error);
-      });
-  }
-  
+    .catch(error => {
+      console.error('Error al registrar el préstamo:', error);
+    });
+}
+
+// Función para obtener todos los préstamos desde el servidor
+function getLoans() {
+  fetch('/loans') // Usa una URL relativa
+    .then(response => response.json())
+    .then(data => {
+      loans = data;
+      updateTable();
+    })
+    .catch(error => {
+      console.error('Error al obtener los préstamos:', error);
+    });
+}
 
 // Función para eliminar un préstamo por ID
 function deleteLoan(id) {
@@ -93,14 +92,18 @@ function toggleReturned(id) {
 }
 
 // Función para procesar el código de devolución
+const validReturnCode = "12345"; // Código de devolución válido
+
 function processReturnCode() {
   const code = returnCodeInput.value.trim();
 
-  if (code === '') {
-    alert('Por favor, ingresa el código de devolución.');
+  // Verificar si el código ingresado es correcto
+  if (code !== validReturnCode) {
+    alert('Código de devolución incorrecto.');
     return;
   }
 
+  // Si el código es correcto, marcamos el préstamo como devuelto
   const loan = loans.find(loan => loan.id === currentLoanId);
   if (loan) {
     loan.returned = true;
@@ -118,7 +121,7 @@ function cancelReturn() {
   codeModal.style.display = 'none';
 }
 
-// Función para actualizar la tabla HTML
+// Función para actualizar la tabla HTML con los préstamos
 function updateTable(filteredLoans = loans) {
   loanTableBody.innerHTML = '';
 
@@ -154,36 +157,19 @@ function filterLoans() {
 
   updateTable(filteredLoans);
 }
-// Código de devolución válido
-const validReturnCode = "12345";
 
-// Función para procesar el código de devolución
-function processReturnCode() {
-  const code = returnCodeInput.value.trim();
+// === EVENTOS ===
 
-  // Verificar si el código ingresado es correcto
-  if (code !== validReturnCode) {
-    alert('Código de devolución incorrecto.');
-    return;
-  }
-
-  // Si el código es correcto, marcamos el préstamo como devuelto
-  const loan = loans.find(loan => loan.id === currentLoanId);
-  if (loan) {
-    loan.returned = true;
-    updateTable();
-  }
-
-  // Limpiar el código y cerrar el modal
-  returnCodeInput.value = '';
-  codeModal.style.display = 'none';
-}
-
-// Eventos
+// Asignar eventos a los botones
 addLoanButton.addEventListener('click', addLoan);
 searchInput.addEventListener('input', filterLoans);
 confirmReturnButton.addEventListener('click', processReturnCode);
 cancelReturnButton.addEventListener('click', cancelReturn);
 
+// === INICIALIZACIÓN ===
+
 // Llamar a la función para generar las opciones de computadores
 generateComputerOptions();
+
+// Cargar los préstamos al cargar la página
+getLoans();
