@@ -30,7 +30,7 @@ db.connect(err => {
 });
 
 // Servir archivos estáticos (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Ruta para obtener todos los préstamos
 app.get('/loans', (req, res) => {
