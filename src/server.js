@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 // Configuración de la base de datos PostgreSQL
 const db = new Client({
-  connectionString: 'postgresql://computadores_nv9i_user:WTyihN4JFg8bfOOEqCr96NG34zaRcnWd@dpg-ct4gjd08fa8c73bp5k0g-a/computadores_nv9i', 
+  connectionString: 'postgresql://computadores_nv9i_usuario:WTyihN4JFg8bfOOEqCr96NG34zaRcnWd@dpg-ct4gjd08fa8c73bp5k0g-a/computadores_nv9i', 
   ssl: {
     rejectUnauthorized: false // Habilitar SSL para la conexión en Render
   }
@@ -49,12 +49,12 @@ app.get('/loans', (req, res) => {
 
 // Ruta para agregar un nuevo préstamo
 app.post('/loans', (req, res) => {
-  const { computer, user, date, returned } = req.body;
-  const query = 'INSERT INTO loans (computer, user, date, returned) VALUES ($1, $2, $3, $4)';
+  const { computer, usuario, date, returned } = req.body;
+  const query = 'INSERT INTO loans (computer, usuario, date, returned) VALUES ($1, $2, $3, $4)';
   
-  console.log('Datos del préstamo recibido:', { computer, user, date, returned }); // Verifica que los datos sean los correctos
+  console.log('Datos del préstamo recibido:', { computer, usuario, date, returned }); // Verifica que los datos sean los correctos
 
-  db.query(query, [computer, user, date, returned], (err, result) => {
+  db.query(query, [computer, usuario, date, returned], (err, result) => {
     if (err) {
       console.error('Error al agregar el préstamo:', err);
       res.status(500).send('Error al agregar el préstamo');
