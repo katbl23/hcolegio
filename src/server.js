@@ -3,6 +3,7 @@ const express = require('express');
 const { Client } = require('pg'); // Usar pg para conectarse a PostgreSQL
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 
 // Crear la aplicación Express
 const app = express();
@@ -27,6 +28,9 @@ db.connect(err => {
     console.log('Conectado a la base de datos PostgreSQL');
   }
 });
+
+// Servir archivos estáticos (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Ruta para obtener todos los préstamos
 app.get('/loans', (req, res) => {
@@ -61,9 +65,13 @@ app.post('/loans', (req, res) => {
   });
 });
 
+// Ruta para servir el archivo HTML (si no se usa en la ruta principal)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // Iniciar el servidor
 const port = process.env.PORT || 3000; // El puerto será dinámico si está en producción
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
-
