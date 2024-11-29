@@ -85,7 +85,7 @@ function getLoans() {
     })
     .catch(error => {
       console.error('Error al obtener los préstamos:', error);
-      showError('Hubo un problema al obtener los préstamos.');
+      showError('Hubo un problema al obtener los préstamos.'+error.message);
     });
 }
 
