@@ -52,8 +52,10 @@ function addLoan() {
     body: JSON.stringify(newLoan),
   })
     .then(response => {
-      console.log('Respuesta del servidor:', response); // Esto te ayudará a ver qué recibe el cliente
-      return response.json(); // Intentar convertir la respuesta a JSON
+      if (!response.ok) {
+        return response.text().then(text => { throw new Error(text); }); // Manejar respuestas no exitosas
+      }
+      return response.json(); // Intentar convertir a JSON si la respuesta es válida
     })
     .then(() => {
       computerInput.value = '';
@@ -62,13 +64,20 @@ function addLoan() {
       getLoans(); // Obtener la lista actualizada de préstamos
     })
     .catch(error => {
-      console.error('Error al registrar el préstamo:', error);
+      console.error('Error al registrar el préstamo:', error.message);
+      showError('Hubo un problema al registrar el préstamo. Inténtalo de nuevo.');
     });
-  
+}
+
 // Función para obtener todos los préstamos desde el servidor
 function getLoans() {
   fetch('/loans') // Usa una URL relativa
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al obtener los préstamos.');
+      }
+      return response.json();
+    })
     .then(data => {
       console.log('Préstamos obtenidos del servidor:', data); // Verifica los datos recibidos
       loans = data;
@@ -76,6 +85,7 @@ function getLoans() {
     })
     .catch(error => {
       console.error('Error al obtener los préstamos:', error);
+      showError('Hubo un problema al obtener los préstamos.');
     });
 }
 
@@ -110,10 +120,13 @@ function processReturnCode() {
 
   // Si el código es correcto, marcamos el préstamo como devuelto
   const loan = loans.find(loan => loan.id === currentLoanId);
-  if (loan) {
-    loan.returned = true;
-    updateTable();
+  if (!loan) {
+    alert('Préstamo no encontrado.');
+    return;
   }
+
+  loan.returned = true;
+  updateTable();
 
   // Limpiar el código y cerrar el modal
   returnCodeInput.value = '';
@@ -161,6 +174,13 @@ function filterLoans() {
   );
 
   updateTable(filteredLoans);
+}
+
+// Función para mostrar mensajes de error
+function showError(message) {
+  const errorDiv = document.getElementById('error');
+  errorDiv.textContent = message;
+  errorDiv.style.display = 'block';
 }
 
 // === EVENTOS ===
