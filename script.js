@@ -24,31 +24,56 @@ function generateComputerOptions() {
   }
 }
 
-// Función para agregar un préstamo
+// Función para agregar un préstamo a la base de datos
 function addLoan() {
-  const computer = computerInput.value.trim();
-  const user = userInput.value.trim();
-
-  if (!computer || !user) {
-    alert('Por favor, completa todos los campos.');
-    return;
+    const computer = computerInput.value.trim();
+    const user = userInput.value.trim();
+  
+    if (!computer || !user) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+  
+    const newLoan = {
+      computer: computer,
+      user: user,
+      date: new Date().toLocaleString(),
+      returned: false,
+    };
+  
+    // Hacer una solicitud POST para agregar el préstamo al servidor
+    fetch('http://localhost:3000/loans', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newLoan),
+    })
+      .then(response => response.json())
+      .then(() => {
+        computerInput.value = '';
+        userInput.value = '';
+        alert('Préstamo registrado con éxito');
+        getLoans(); // Obtener la lista actualizada de préstamos
+      })
+      .catch(error => {
+        console.error('Error al registrar el préstamo:', error);
+      });
   }
-
-  const newLoan = {
-    id: loans.length + 1,
-    computer: computer,
-    user: user,
-    date: new Date().toLocaleString(),
-    returned: false, // Nuevo estado: no devuelto
-  };
-
-  loans.push(newLoan);
-
-  computerInput.value = '';
-  userInput.value = '';
-
-  updateTable();
-}
+  
+  // Función para obtener todos los préstamos desde el servidor
+  function getLoans() {
+    fetch('http://localhost:3000/loans')
+      .then(response => response.json())
+      .then(data => {
+        loans = data;
+        updateTable();
+      })
+      .catch(error => {
+        console.error('Error al obtener los préstamos:', error);
+      });
+  }
+  
 
 // Función para eliminar un préstamo por ID
 function deleteLoan(id) {
