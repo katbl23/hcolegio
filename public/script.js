@@ -51,7 +51,10 @@ function addLoan() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newLoan),
   })
-    .then(response => response.json())
+    .then(response => {
+      console.log('Respuesta del servidor:', response); // Esto te ayudará a ver qué recibe el cliente
+      return response.json(); // Intentar convertir la respuesta a JSON
+    })
     .then(() => {
       computerInput.value = '';
       userInput.value = '';
@@ -61,8 +64,7 @@ function addLoan() {
     .catch(error => {
       console.error('Error al registrar el préstamo:', error);
     });
-}
-
+  
 // Función para obtener todos los préstamos desde el servidor
 function getLoans() {
   fetch('/loans') // Usa una URL relativa
