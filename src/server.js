@@ -11,7 +11,7 @@ const app = express();
 // Configurar middleware
 app.use(cors());
 app.use(bodyParser.json());
-
+app.use(express.json());
 // Configuración de la base de datos PostgreSQL
 const db = new Client({
   connectionString: 'postgresql://computadores_nv9i_user:WTyihN4JFg8bfOOEqCr96NG34zaRcnWd@dpg-ct4gjd08fa8c73bp5k0g-a:5432/computadores_nv9i', 
@@ -68,8 +68,8 @@ app.post('/loans', async (req, res) => {
     res.status(201).json(result.rows[0]);
 
   } catch (error) {
-    console.error('Error al registrar préstamo:', error);
-    res.status(500).json({ message: 'Error al registrar el préstamo', error: error.message });
+    console.error('Error al registrarlo préstamo:', error);
+    res.status(500).json({ message: 'Error al registrarlo el préstamo', error: error.message });
   }
 });
 

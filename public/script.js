@@ -40,9 +40,10 @@ async function addLoan() {
       },
       body: JSON.stringify(loan),
     });
-
+    console.log('Response Status:', response.status);
     if (!response.ok) {
       throw new Error("Error al agregar el préstamo" +response.statusText);
+      
     }
 
     const result = await response.json();
@@ -51,7 +52,7 @@ async function addLoan() {
     loadLoans(); // Actualizar la lista
   } catch (error) {
     console.error("Error al registrar el préstamo:", error.message);
-    res.status(500).json({ message: 'Error al registrar el préstamo', error: error.message });
+    
     showError(error.message);
   }
 }
