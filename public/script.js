@@ -15,6 +15,37 @@ function populateComputers() {
   }
 }
 
+// Función para devolver un préstamo
+async function returnLoan(loanId) {
+  try {
+    // Hacer la solicitud para marcar el préstamo como devuelto
+    const response = await fetch(`${serverUrl}/loans/${loanId}`, {
+      method: 'PUT', // O 'PATCH' dependiendo de cómo manejes las actualizaciones
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ returned: true }), // Cambiar el estado a 'true'
+    });
+
+    // Comprobar si la solicitud fue exitosa
+    if (!response.ok) {
+      throw new Error(`Error al devolver el préstamo: ${response.statusText}`);
+    }
+
+    // Parsear la respuesta JSON
+    const result = await response.json();
+    console.log('Préstamo devuelto:', result);
+
+    // Actualizar la interfaz de usuario (por ejemplo, recargar la lista de préstamos)
+    loadLoans(); // Suponiendo que tienes una función loadLoans que actualiza la lista
+    alert('El préstamo ha sido devuelto con éxito.');
+  } catch (error) {
+    console.error('Error al devolver el préstamo:', error.message);
+    showError(`Hubo un problema al devolver el préstamo: ${error.message}`);
+  }
+}
+
+
 async function addLoan() {
   const computer = document.getElementById("computer").value;
   const usuario = document.getElementById("usuario").value;
