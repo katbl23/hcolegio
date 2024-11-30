@@ -20,19 +20,23 @@ async function addLoan() {
   const computer = document.getElementById("computer").value;
   const usuario = document.getElementById("usuario").value; // Cambiado a "usuario"
 
+  // Verificar si los campos son vacíos
   if (!computer || !usuario) {
     showError("Por favor, completa todos los campos.");
     return;
   }
 
+  // Crear el objeto de préstamo
   const loan = {
     computer: computer,
     usuario: usuario, // Cambiado a "usuario"
-    date: new Date().toLocaleString(),
+    date: new Date().toISOString(), // Utilizando el formato ISO para fecha
     returned: false,
   };
   console.log("Datos del préstamo:", loan);
+
   try {
+    // Realizar la solicitud a la API
     const response = await fetch(serverUrl, {
       method: "POST",
       headers: {
@@ -40,22 +44,29 @@ async function addLoan() {
       },
       body: JSON.stringify(loan),
     });
+
+    // Verificar si la respuesta fue exitosa
     console.log('Response Status:', response.status);
     if (!response.ok) {
-      throw new Error("Error al agregar el préstamo" +response.statusText);
-      
+      // Capturar el error con el estado de la respuesta
+      throw new Error(`Error al agregar el préstamo: ${response.statusText}`);
     }
 
+    // Parsear la respuesta JSON
     const result = await response.json();
     console.log("Préstamo registrado:", result);
     alert("Préstamo registrado con éxito.");
-    loadLoans(); // Actualizar la lista
+    loadLoans(); // Actualizar la lista de préstamos
+
   } catch (error) {
+    // Capturar y mostrar cualquier error en el proceso
     console.error("Error al registrar el préstamo:", error.message);
-    
-    showError(error.message);
+
+    // Mostrar el error al usuario
+    showError(`Hubo un problema al registrar el préstamo: ${error.message}`);
   }
 }
+
 
 // Función para mostrar mensajes de error
 function showError(message) {

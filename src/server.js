@@ -50,30 +50,31 @@ app.get('/loans', (req, res) => {
 // Ruta para agregar un nuevo préstamo
 app.post('/loans', async (req, res) => {
   const { computer, usuario, date, returned } = req.body;
-  console.log('Datos recibidos:', req.body);
+
+  // Verificar que los datos estén presentes
+  if (!computer || !usuario || !date || returned === undefined) {
+    return res.status(400).json({ message: 'Faltan campos requeridos' });
+  }
+
+  console.log("Datos recibidos:", { computer, usuario, date, returned });
+
   try {
-    console.log('Datos recibidos:', req.body); 
-   
-
-    // Verificar si los campos son correctos
-    if (!computer || !usuario || !date) {
-      return res.status(400).json({ message: 'Faltan datos requeridos' });
-    }
-
-    // Aquí va la lógica para insertar en la base de datos
-    const query = 'INSERT INTO loans (computer, usuario, date, returned) VALUES ($1, $2, $3, $4) RETURNING *';
+    const query = `
+      INSERT INTO loans (computer, usuario, date, returned)
+      VALUES ($1, $2, $3, $4) RETURNING *;
+    `;
     const values = [computer, usuario, date, returned];
-    const result = await pool.query(query, values); // Suponiendo que uses pg para PostgreSQL
 
-    res.status(201).json(result.rows[0]); // Devuelve el préstamo registrado
-    // Responder con el nuevo préstamo
-    res.status(201).json(result.rows[0]);
+    // Ejecutar la consulta
+    const result = await pool.query(query, values);
 
+    res.status(201).json(result.rows[0]); // Retorna el préstamo recién creado
   } catch (error) {
-    console.error('Error al registrarlo préstamo:', error);
-    res.status(500).json({ message: 'Error al registrarlo el préstamo', error: error.message });
+    console.error('Error al registrar préstamo:', error);
+    res.status(500).json({ message: 'Error al agregar préstamo', error: error.message });
   }
 });
+
 
 // Ruta para servir el archivo HTML (si no se usa en la ruta principal)
 app.get('/', (req, res) => {
