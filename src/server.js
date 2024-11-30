@@ -48,21 +48,28 @@ app.get('/loans', (req, res) => {
 });
 
 // Ruta para agregar un nuevo préstamo
-app.post('/loans', (req, res) => {
-  const { computer, usuario, date, returned } = req.body;
-  const query = 'INSERT INTO loans (computer, usuario, date, returned) VALUES ($1, $2, $3, $4)';
-  
-  console.log('Datos del préstamo recibido:', { computer, usuario, date, returned }); // Verifica que los datos sean los correctos
+app.post('/loans', async (req, res) => {
+  try {
+    const { computer, usuario, date, returned } = req.body;
 
-  db.query(query, [computer, usuario, date, returned], (err, result) => {
-    if (err) {
-      console.error('Error al agregar el préstamo:', err);
-      res.status(500).send('Error al agregar el préstamo');
-      return;
+    // Verificar si los campos son correctos
+    if (!computer || !usuario || !date) {
+      return res.status(400).json({ message: 'Faltan datos requeridos' });
     }
-    console.log('Préstamo agregado exitosamente');
-    res.status(201).send('Préstamo agregado');
-  });
+
+    // Aquí va la lógica para insertar en la base de datos
+    const result = await db.query(
+      'INSERT INTO loans (computer, usuario, date, returned) VALUES ($1, $2, $3, $4) RETURNING *',
+      [computer, usuario, date, returned]
+    );
+
+    // Responder con el nuevo préstamo
+    res.status(201).json(result.rows[0]);
+
+  } catch (error) {
+    console.error('Error al registrar préstamo:', error);
+    res.status(500).json({ message: 'Error al registrar el préstamo', error: error.message });
+  }
 });
 
 // Ruta para servir el archivo HTML (si no se usa en la ruta principal)
