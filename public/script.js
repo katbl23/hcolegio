@@ -31,7 +31,7 @@ async function addLoan() {
     date: new Date().toLocaleString(),
     returned: false,
   };
-
+  console.log("Datos del préstamo:", loan);
   try {
     const response = await fetch(serverUrl, {
       method: "POST",

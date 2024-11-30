@@ -7,11 +7,11 @@ const path = require('path');
 
 // Crear la aplicación Express
 const app = express();
-
+app.use(express.json());
 // Configurar middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.json());
+
 // Configuración de la base de datos PostgreSQL
 const db = new Client({
   connectionString: 'postgresql://computadores_nv9i_user:WTyihN4JFg8bfOOEqCr96NG34zaRcnWd@dpg-ct4gjd08fa8c73bp5k0g-a:5432/computadores_nv9i', 
@@ -49,9 +49,11 @@ app.get('/loans', (req, res) => {
 
 // Ruta para agregar un nuevo préstamo
 app.post('/loans', async (req, res) => {
+  const { computer, usuario, date, returned } = req.body;
+  console.log('Datos recibidos:', req.body);
   try {
     console.log('Datos recibidos:', req.body); 
-    const { computer, usuario, date, returned } = req.body;
+   
 
     // Verificar si los campos son correctos
     if (!computer || !usuario || !date) {
@@ -59,11 +61,11 @@ app.post('/loans', async (req, res) => {
     }
 
     // Aquí va la lógica para insertar en la base de datos
-    const result = await db.query(
-      'INSERT INTO loans (computer, usuario, date, returned) VALUES ($1, $2, $3, $4) RETURNING *',
-      [computer, usuario, date, returned]
-    );
+    const query = 'INSERT INTO loans (computer, usuario, date, returned) VALUES ($1, $2, $3, $4) RETURNING *';
+    const values = [computer, usuario, date, returned];
+    const result = await pool.query(query, values); // Suponiendo que uses pg para PostgreSQL
 
+    res.status(201).json(result.rows[0]); // Devuelve el préstamo registrado
     // Responder con el nuevo préstamo
     res.status(201).json(result.rows[0]);
 
