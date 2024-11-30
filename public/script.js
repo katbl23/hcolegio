@@ -22,7 +22,7 @@ async function returnLoan(loanId) {
 
   if (!securityCode) {
     // Mostrar mensaje de advertencia
-    alert('Código de seguridad incorrecto');
+    alert('Ingresa codigo de seguridad en la parte de arriba');
     return; // No continuar si el código está vacío
   }
 
