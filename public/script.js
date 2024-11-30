@@ -18,7 +18,7 @@ function populateComputers() {
 // Función para registrar préstamo
 async function addLoan() {
   const computer = document.getElementById("computer").value;
-  const usuario = document.getElementById("user").value; // Cambiado a "usuario"
+  const usuario = document.getElementById("usuario").value; // Cambiado a "usuario"
 
   if (!computer || !usuario) {
     showError("Por favor, completa todos los campos.");
@@ -42,7 +42,7 @@ async function addLoan() {
     });
 
     if (!response.ok) {
-      throw new Error("Error al agregar el préstamo");
+      throw new Error("Error al agregar el préstamo" +response.statusText);
     }
 
     const result = await response.json();
