@@ -1,6 +1,20 @@
 // URL del servidor
 const serverUrl = "https://hcolegio.onrender.com/loans";
 
+// Función para llenar el desplegable de computadores
+function populateComputers() {
+  const computerSelect = document.getElementById("computer");
+  computerSelect.innerHTML = '<option value="">Selecciona un computador</option>'; // Opción predeterminada
+
+  // Generar 25 opciones de computadores
+  for (let i = 1; i <= 25; i++) {
+    const option = document.createElement("option");
+    option.value = `Computador ${i}`;
+    option.textContent = `Computador ${i}`;
+    computerSelect.appendChild(option);
+  }
+}
+
 // Función para registrar préstamo
 async function addLoan() {
   const computer = document.getElementById("computer").value;
@@ -88,25 +102,7 @@ function populateLoanTable(loans) {
   });
 }
 
-// Función para devolver un préstamo
-async function returnLoan(loanId) {
-  try {
-    const response = await fetch(`${serverUrl}/${loanId}`, {
-      method: "PUT",
-    });
-
-    if (!response.ok) {
-      throw new Error("Error al devolver el préstamo");
-    }
-
-    alert("Préstamo devuelto con éxito.");
-    loadLoans(); // Actualizar la lista
-  } catch (error) {
-    console.error("Error al devolver el préstamo:", error.message);
-    showError(error.message);
-  }
-}
-
 // Inicializar
 document.getElementById("addLoan").addEventListener("click", addLoan);
-loadLoans();
+populateComputers(); // Llenar el desplegable
+loadLoans(); // Cargar los préstamos al inicio
