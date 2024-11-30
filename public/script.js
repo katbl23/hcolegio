@@ -1,19 +1,36 @@
 // URL del servidor
 const serverUrl = "https://hcolegio.onrender.com/loans";
 
-// Función para llenar el desplegable de computadores
+
+// Datos de los computadores (puedes agregar más computadoras y su estado)
+let computers = Array.from({ length: 25 }, (_, i) => ({
+  id: i + 1,
+  name: `Computador ${i + 1}`,
+  isLoaned: false // inicializa todos como no prestados
+}));
+
+// Función para llenar el desplegable de computadores con su estado (prestado o no)
 function populateComputers() {
   const computerSelect = document.getElementById("computer");
   computerSelect.innerHTML = '<option value="">Selecciona un computador</option>'; // Opción predeterminada
 
-  // Generar 25 opciones de computadores
-  for (let i = 1; i <= 25; i++) {
+  // Llenar el desplegable con los computadores disponibles y deshabilitar los prestados
+  computers.forEach(computer => {
     const option = document.createElement("option");
-    option.value = `Computador ${i}`;
-    option.textContent = `Computador ${i}`;
+    option.value = computer.id; // Usa el ID para manejar la lógica internamente
+    option.textContent = computer.name;
+
+    // Deshabilitar si el computador está prestado
+    if (computer.isLoaned) {
+      option.disabled = true;
+    }
+
     computerSelect.appendChild(option);
-  }
+  });
 }
+
+
+
 
 // Función para devolver un préstamo
 async function returnLoan(loanId) {
@@ -61,7 +78,7 @@ async function returnLoan(loanId) {
 }
 
 
-async function addLoan() {
+/* async function addLoan() {
   const computer = document.getElementById("computer").value;
   const usuario = document.getElementById("usuario").value;
 
@@ -104,6 +121,74 @@ async function addLoan() {
     console.log("Préstamo registrado:", result);
     alert("Préstamo registrado con éxito.");
     loadLoans(); // Actualizar la lista de préstamos
+
+  } catch (error) {
+    // Capturar y mostrar cualquier error en el proceso
+    console.error("Error al registrar el préstamo:", error.message);
+
+    // Mostrar el error al usuario
+    showError(`Hubo un problema al registrar el préstamo: ${error.message}`);
+  }
+}
+
+ */
+
+async function addLoan() {
+  const computerSelect = document.getElementById("computer");
+  const usuario = document.getElementById("usuario").value;
+  const computer = computerSelect.value; // Obtiene el valor del computador seleccionado
+
+  // Verificar si los campos son vacíos
+  if (!computer || !usuario) {
+    showError("Por favor, completa todos los campos.");
+    return;
+  }
+
+  // Verificar si el computador está en préstamo
+  const selectedComputer = computers.find(c => c.id === parseInt(computer)); // Encuentra el computador seleccionado
+
+  if (selectedComputer && selectedComputer.isLoaned) {
+    showError("Este computador ya está en préstamo.");
+    return;
+  }
+
+  // Crear el objeto de préstamo
+  const loan = {
+    computer: selectedComputer.name, // Usamos el nombre o ID según tu preferencia
+    usuario: usuario,
+    date: new Date().toISOString(),
+    returned: false,
+  };
+  console.log("Datos del préstamo:", loan);
+
+  try {
+    // Realizar la solicitud a la API
+    const response = await fetch(serverUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loan),
+    });
+
+    // Verificar si la respuesta fue exitosa
+    console.log('Response Status:', response.status);
+
+    if (!response.ok) {
+      // Si la respuesta no es exitosa, capturamos el cuerpo del error
+      const errorDetails = await response.text(); // Captura el texto de error
+      throw new Error(`Error al agregar el préstamo: ${response.statusText}, Detalles: ${errorDetails}`);
+    }
+
+    // Parsear la respuesta JSON
+    const result = await response.json();
+    console.log("Préstamo registrado:", result);
+    alert("Préstamo registrado con éxito.");
+    loadLoans(); // Actualizar la lista de préstamos
+
+    // Actualizar el estado del computador en la interfaz (marcarlo como prestado)
+    selectedComputer.isLoaned = true;
+    populateComputers(); // Actualiza las opciones del desplegable
 
   } catch (error) {
     // Capturar y mostrar cualquier error en el proceso
