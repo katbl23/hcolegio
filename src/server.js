@@ -50,6 +50,7 @@ app.get('/loans', (req, res) => {
 // Ruta para agregar un nuevo préstamo
 app.post('/loans', async (req, res) => {
   try {
+    console.log('Datos recibidos:', req.body); 
     const { computer, usuario, date, returned } = req.body;
 
     // Verificar si los campos son correctos
