@@ -17,6 +17,15 @@ function populateComputers() {
 
 // Función para devolver un préstamo
 async function returnLoan(loanId) {
+
+  const securityCode = document.getElementById('securityCode').value;
+
+  // Validar el código de seguridad
+  const validCode = '1234'; // Código de seguridad predefinido
+  if (securityCode !== validCode) {
+    alert('Código de seguridad incorrecto');
+    return;
+  }
   try {
     // Hacer la solicitud para marcar el préstamo como devuelto
     const response = await fetch(`${serverUrl}/${loanId}`, {
