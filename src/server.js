@@ -48,6 +48,7 @@ app.get('/loans', (req, res) => {
 });
 
 // Ruta para agregar un nuevo préstamo
+// Ruta para agregar un nuevo préstamo
 app.post('/loans', async (req, res) => {
   const { computer, usuario, date, returned } = req.body;
 
@@ -65,8 +66,8 @@ app.post('/loans', async (req, res) => {
     `;
     const values = [computer, usuario, date, returned];
 
-    // Ejecutar la consulta
-    const result = await pool.query(query, values);
+    // Ejecutar la consulta con la conexión `db`
+    const result = await db.query(query, values); // Cambié 'pool' a 'db'
 
     res.status(201).json(result.rows[0]); // Retorna el préstamo recién creado
   } catch (error) {
@@ -74,8 +75,6 @@ app.post('/loans', async (req, res) => {
     res.status(500).json({ message: 'Error al agregar préstamo', error: error.message });
   }
 });
-
-
 // Ruta para servir el archivo HTML (si no se usa en la ruta principal)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
