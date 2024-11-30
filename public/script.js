@@ -6,7 +6,6 @@ function populateComputers() {
   const computerSelect = document.getElementById("computer");
   computerSelect.innerHTML = '<option value="">Selecciona un computador</option>'; // Opción predeterminada
 
-  // Generar 25 opciones de computadores
   for (let i = 1; i <= 25; i++) {
     const option = document.createElement("option");
     option.value = `Computador ${i}`;
@@ -18,19 +17,21 @@ function populateComputers() {
 // Función para registrar préstamo
 async function addLoan() {
   const computer = document.getElementById("computer").value;
-  const usuario = document.getElementById("user").value; // Cambiado a "usuario"
+  const user = document.getElementById("user").value;
 
-  if (!computer || !usuario) {
+  if (!computer || !user) {
     showError("Por favor, completa todos los campos.");
     return;
   }
 
   const loan = {
     computer: computer,
-    usuario: usuario, // Cambiado a "usuario"
+    usuario: user, // Asegúrate de usar el campo correcto en la base de datos
     date: new Date().toLocaleString(),
     returned: false,
   };
+
+  console.log("Datos enviados:", loan); // Verificar los datos antes de enviarlos
 
   try {
     const response = await fetch(serverUrl, {
@@ -42,7 +43,8 @@ async function addLoan() {
     });
 
     if (!response.ok) {
-      throw new Error("Error al agregar el préstamo");
+      const errorText = await response.text();
+      throw new Error(errorText || "Error al agregar el préstamo");
     }
 
     const result = await response.json();
@@ -53,17 +55,6 @@ async function addLoan() {
     console.error("Error al registrar el préstamo:", error.message);
     showError(error.message);
   }
-}
-
-// Función para mostrar mensajes de error
-function showError(message) {
-  const errorMessage = document.getElementById("error-message");
-  errorMessage.textContent = message;
-  errorMessage.style.display = "block";
-
-  setTimeout(() => {
-    errorMessage.style.display = "none";
-  }, 3000);
 }
 
 // Función para cargar préstamos desde el servidor
@@ -92,7 +83,7 @@ function populateLoanTable(loans) {
     row.innerHTML = `
       <td>${index + 1}</td>
       <td>${loan.computer}</td>
-      <td>${loan.usuario}</td> <!-- Cambiado a "usuario" -->
+      <td>${loan.usuario}</td>
       <td>${loan.date}</td>
       <td>${loan.returned ? "Devuelto" : "En préstamo"}</td>
       <td>
@@ -102,7 +93,18 @@ function populateLoanTable(loans) {
   });
 }
 
+// Mostrar mensajes de error
+function showError(message) {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = message;
+  errorMessage.style.display = "block";
+
+  setTimeout(() => {
+    errorMessage.style.display = "none";
+  }, 3000);
+}
+
 // Inicializar
 document.getElementById("addLoan").addEventListener("click", addLoan);
-populateComputers(); // Llenar el desplegable
-loadLoans(); // Cargar los préstamos al inicio
+populateComputers();
+loadLoans();
