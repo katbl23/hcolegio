@@ -19,7 +19,7 @@ function populateComputers() {
 async function returnLoan(loanId) {
   try {
     // Hacer la solicitud para marcar el préstamo como devuelto
-    const response = await fetch(`${serverUrl}/loans/${loanId}}`, {
+    const response = await fetch(`${serverUrl}/${loanId}}`, {
       method: 'PUT', // O 'PATCH' dependiendo de cómo manejes las actualizaciones
       headers: {
         'Content-Type': 'application/json',
