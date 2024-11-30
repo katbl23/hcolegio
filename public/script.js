@@ -15,10 +15,9 @@ function populateComputers() {
   }
 }
 
-// Función para registrar préstamo
 async function addLoan() {
   const computer = document.getElementById("computer").value;
-  const usuario = document.getElementById("usuario").value; // Cambiado a "usuario"
+  const usuario = document.getElementById("usuario").value;
 
   // Verificar si los campos son vacíos
   if (!computer || !usuario) {
@@ -29,8 +28,8 @@ async function addLoan() {
   // Crear el objeto de préstamo
   const loan = {
     computer: computer,
-    usuario: usuario, // Cambiado a "usuario"
-    date: new Date().toISOString(), // Utilizando el formato ISO para fecha
+    usuario: usuario,
+    date: new Date().toISOString(),
     returned: false,
   };
   console.log("Datos del préstamo:", loan);
@@ -47,9 +46,11 @@ async function addLoan() {
 
     // Verificar si la respuesta fue exitosa
     console.log('Response Status:', response.status);
+
     if (!response.ok) {
-      // Capturar el error con el estado de la respuesta
-      throw new Error(`Error al agregar el préstamo: ${response.statusText}`);
+      // Si la respuesta no es exitosa, capturamos el cuerpo del error
+      const errorDetails = await response.text(); // Captura el texto de error
+      throw new Error(`Error al agregar el préstamo: ${response.statusText}, Detalles: ${errorDetails}`);
     }
 
     // Parsear la respuesta JSON
@@ -66,6 +67,7 @@ async function addLoan() {
     showError(`Hubo un problema al registrar el préstamo: ${error.message}`);
   }
 }
+
 
 
 // Función para mostrar mensajes de error
