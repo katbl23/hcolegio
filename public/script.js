@@ -20,6 +20,14 @@ async function returnLoan(loanId) {
 
   const securityCode = document.getElementById('securityCode').value;
 
+  if (!securityCode) {
+    // Mostrar mensaje de advertencia
+    const errorMessage = document.getElementById("error-message");
+    errorMessage.style.display = "block";
+    errorMessage.innerText = "Por favor, ingrese el código de seguridad";
+    return; // No continuar si el código está vacío
+  }
+
   // Validar el código de seguridad
   const validCode = '1234'; // Código de seguridad predefinido
   if (securityCode !== validCode) {
