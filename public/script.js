@@ -51,6 +51,7 @@ async function addLoan() {
     loadLoans(); // Actualizar la lista
   } catch (error) {
     console.error("Error al registrar el préstamo:", error.message);
+    res.status(500).json({ message: 'Error al registrar el préstamo', error: error.message });
     showError(error.message);
   }
 }
