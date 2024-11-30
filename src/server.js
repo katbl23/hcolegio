@@ -47,7 +47,35 @@ app.get('/loans', (req, res) => {
   });
 });
 
-// Ruta para agregar un nuevo préstamo
+// Ruta para marcar un préstamo como devuelto
+app.put('/loans/:id', async (req, res) => {
+  const { id } = req.params;
+  const { returned } = req.body;
+
+  if (returned === undefined) {
+    return res.status(400).json({ message: 'El campo "returned" es obligatorio' });
+  }
+
+  try {
+    const query = `
+      UPDATE loans SET returned = $1 WHERE id = $2 RETURNING *;
+    `;
+    const values = [returned, id];
+
+    const result = await db.query(query, values);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Préstamo no encontrado' });
+    }
+
+    res.status(200).json(result.rows[0]); // Devuelve el préstamo actualizado
+  } catch (error) {
+    console.error('Error al actualizar el préstamo:', error);
+    res.status(500).json({ message: 'Error al actualizar el préstamo', error: error.message });
+  }
+});
+
+
 // Ruta para agregar un nuevo préstamo
 app.post('/loans', async (req, res) => {
   const { computer, usuario, date, returned } = req.body;
