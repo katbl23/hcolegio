@@ -18,16 +18,16 @@ function populateComputers() {
 // Función para registrar préstamo
 async function addLoan() {
   const computer = document.getElementById("computer").value;
-  const user = document.getElementById("user").value;
+  const usuario = document.getElementById("user").value; // Cambiado a "usuario"
 
-  if (!computer || !user) {
+  if (!computer || !usuario) {
     showError("Por favor, completa todos los campos.");
     return;
   }
 
   const loan = {
     computer: computer,
-    user: user,
+    usuario: usuario, // Cambiado a "usuario"
     date: new Date().toLocaleString(),
     returned: false,
   };
@@ -92,7 +92,7 @@ function populateLoanTable(loans) {
     row.innerHTML = `
       <td>${index + 1}</td>
       <td>${loan.computer}</td>
-      <td>${loan.user}</td>
+      <td>${loan.usuario}</td> <!-- Cambiado a "usuario" -->
       <td>${loan.date}</td>
       <td>${loan.returned ? "Devuelto" : "En préstamo"}</td>
       <td>
