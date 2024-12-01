@@ -68,10 +68,22 @@ async function returnLoan(loanId) {
     const result = await response.json();
     console.log('Préstamo devuelto:', result);
 
-    // Actualizar la interfaz de usuario (por ejemplo, recargar la lista de préstamos)
-     // Suponiendo que tienes una función loadLoans que actualiza la lista
-    alert('El préstamo ha sido devuelto con éxito.');
-    loadLoans();
+ // Actualizar el estado del computador (habilitarlo de nuevo)
+ const returnedLoan = result; // Suponemos que la respuesta contiene información del préstamo devuelto
+ const returnedComputerId = returnedLoan.computerId; // ID del computador asociado al préstamo
+
+ const computer = computers.find(c => c.id === returnedComputerId);
+ if (computer) {
+   computer.isLoaned = false; // Marcar el computador como disponible
+ }
+
+ // Actualizar la interfaz de usuario
+ alert('El préstamo ha sido devuelto con éxito.');
+ loadLoans(); // Cargar la lista actualizada de préstamos
+ populateComputers();
+
+
+
   } catch (error) {
     console.error('Error al devolver el préstamo:', error.message);
     showError(`Hubo un problema al devolver el préstamo: ${error.message}`);
