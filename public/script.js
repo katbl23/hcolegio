@@ -149,6 +149,7 @@ async function addLoan() {
 }
 
 
+
 /* // Datos de los computadores (puedes agregar más computadoras y su estado)
 let computers = Array.from({ length: 25 }, (_, i) => ({
   id: i + 1,
