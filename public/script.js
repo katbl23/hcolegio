@@ -69,8 +69,9 @@ async function returnLoan(loanId) {
     console.log('Préstamo devuelto:', result);
 
     // Actualizar la interfaz de usuario (por ejemplo, recargar la lista de préstamos)
-    loadLoans(); // Suponiendo que tienes una función loadLoans que actualiza la lista
+     // Suponiendo que tienes una función loadLoans que actualiza la lista
     alert('El préstamo ha sido devuelto con éxito.');
+    loadLoans();
   } catch (error) {
     console.error('Error al devolver el préstamo:', error.message);
     showError(`Hubo un problema al devolver el préstamo: ${error.message}`);
