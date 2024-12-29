@@ -535,10 +535,12 @@ function populateLoanTable(loans) {
       <td>${index + 1}</td>
       <td>${loan.computer}</td>
       <td>${loan.usuario}</td> <!-- Cambiado a "usuario" -->
+      <td>${loan.date}</td>
+      
+      <td>${loan.returned ? "Devuelto" : "En préstamo"}</td>
        <td>${loan.propietario}</td> <!-- Mostrar el propietario -->
         <td>${loan.ejePrestamo}</td> <!-- Mostrar el eje de préstamo -->
-      <td>${loan.date}</td>
-      <td>${loan.returned ? "Devuelto" : "En préstamo"}</td>
+      
       <td>
         ${!loan.returned ? `<button onclick="returnLoan(${loan.id})">Devolver</button>` : ""}
       </td>
