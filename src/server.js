@@ -8,6 +8,7 @@ const path = require('path');
 // Crear la aplicación Express
 const app = express();
 app.use(express.json());
+
 // Configurar middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,6 +20,7 @@ const db = new Client({
     rejectUnauthorized: false // Habilitar SSL para la conexión en Render
   }
 });
+
 // Conectar a la base de datos
 db.connect(err => {
   if (err) {
@@ -28,8 +30,15 @@ db.connect(err => {
   }
 });
 
+// Desconectar de la base de datos al cerrar el servidor
+process.on('SIGINT', async () => {
+  await db.end();
+  console.log('Conexión a la base de datos cerrada');
+  process.exit(0);
+});
+
 // Servir archivos estáticos (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname, '../public')));
+app.use('/static', express.static(path.join(__dirname, '../public')));
 
 // Ruta para obtener todos los préstamos
 app.get('/loans', (req, res) => {
@@ -51,6 +60,12 @@ app.put('/loans/:id', async (req, res) => {
   const { id } = req.params;
   const { returned } = req.body;
 
+  // Validar que el ID es un número válido
+  if (isNaN(id)) {
+    return res.status(400).json({ message: 'ID inválido' });
+  }
+
+  // Validar que el campo "returned" esté presente
   if (returned === undefined) {
     return res.status(400).json({ message: 'El campo "returned" es obligatorio' });
   }
@@ -74,27 +89,34 @@ app.put('/loans/:id', async (req, res) => {
   }
 });
 
-
 // Ruta para agregar un nuevo préstamo
 app.post('/loans', async (req, res) => {
-  const { computer, usuario, date, returned } = req.body;
+  const { computer, usuario, propietario, ejeprestamo, date, returned } = req.body;
 
   // Verificar que los datos estén presentes
-  if (!computer || !usuario || !date || returned === undefined) {
-    return res.status(400).json({ message: 'Faltan campos requeridos' });
+  if (!computer || !usuario || !propietario || !ejeprestamo || !date) {
+    return res.status(400).json({ message: 'Faltan campos requeridos: computer, usuario, propietario, ejeprestamo o date.' });
   }
 
-  console.log("Datos recibidos:", { computer, usuario, date, returned });
+  console.log("Datos recibidos:", { computer, usuario, propietario, ejeprestamo, date, returned });
 
   try {
     const query = `
-      INSERT INTO loans (computer, usuario, date, returned)
-      VALUES ($1, $2, $3, $4) RETURNING *;
+      INSERT INTO loans (computer, usuario, propietario, ejeprestamo, date, returned)
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
     `;
-    const values = [computer, usuario, date, returned];
+    const values = [computer, usuario, propietario, ejeprestamo, date, returned];
 
     // Ejecutar la consulta con la conexión `db`
-    const result = await db.query(query, values); // Cambié 'pool' a 'db'
+    const result = await db.query(query, values);
+
+    // Asegurémonos de que `result.rows` contiene datos antes de enviarlos al cliente
+    if (result.rows.length === 0) {
+      console.log('No se obtuvo ningún resultado de la base de datos');
+      return res.status(500).json({ message: 'Error al agregar el préstamo' });
+    }
+
+    console.log('Préstamo creado:', result.rows[0]);
 
     res.status(201).json(result.rows[0]); // Retorna el préstamo recién creado
   } catch (error) {
@@ -102,9 +124,10 @@ app.post('/loans', async (req, res) => {
     res.status(500).json({ message: 'Error al agregar préstamo', error: error.message });
   }
 });
+
 // Ruta para servir el archivo HTML (si no se usa en la ruta principal)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 // Iniciar el servidor

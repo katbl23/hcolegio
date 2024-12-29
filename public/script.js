@@ -138,6 +138,7 @@ async function addLoan() {
     }
 
     // Parsear la respuesta JSON
+    console.log(response)
     const result = await response.json();
     console.log("Préstamo registrado:", result);
     alert("Préstamo registrado con éxito.");
