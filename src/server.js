@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 // Configuración de la base de datos PostgreSQL
 const db = new Client({
-  connectionString: 'postgresql://computer_2tsb:InafLOZ7cayzIxNeQlzH0okMGc82EUkq@dpg-ctoag4popnds73fgr4rg-a:5432/computadores_nv9i', 
+  connectionString: 'postgresql://computer_2tsb_user:InafLOZ7cayzIxNeQlzH0okMGc82EUkq@dpg-ctoag4popnds73fgr4rg-a:5432/computer_2tsb', 
   ssl: {
     rejectUnauthorized: false // Habilitar SSL para la conexión en Render
   }
