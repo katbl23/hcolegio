@@ -1,188 +1,199 @@
-/* General */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 20px;
-    padding: 20px;
-  }
-  
-  h1 {
-    color: #333;
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-  
-  /* Estilo para el contenedor del formulario */
-  .form-container, .search-container {
-    margin-bottom: 20px;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .form-container input, .form-container button, .search-container input {
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-  }
-  
-  .form-container button {
-    background-color: #28a745;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .form-container button:hover {
-    background-color: #218838;
-  }
-  
-  .search-container input {
-    width: 200px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-  }
-  
-  /* Estilo para la tabla */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-  }
-  
-  table, th, td {
-    border: 1px solid #ccc;
-  }
-  
-  th, td {
-    padding: 12px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #007bff;
-    color: white;
-    text-transform: uppercase;
-    font-size: 1rem;
-  }
-  
-  td {
-    font-size: 1rem;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .returned {
-    text-decoration: line-through;
-    color: gray;
-    background-color: #f8d7da;
-  }
-  
-  /* Estilo para los botones de acciones */
-  button {
-    padding: 8px 12px;
-    margin: 2px;
-    border: none;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-    color: white;
-  }
-  
-  button:active {
-    background-color: #003366;
-  }
-  
-  /* Añadir un poco de animación */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  tbody tr {
-    animation: fadeIn 0.5s ease-in;
-  }
-  
-  /* Para pantallas medianas y más pequeñas (Tabletas, teléfonos) */
-@media (max-width: 768px) {
-  /* Ajustar la disposición del formulario */
-  .form-container {
-      flex-direction: column;
-      align-items: center;
-  }
-
-  .form-container input, .form-container button, .search-container input {
-      width: 100%;
-      max-width: 300px;
-      margin-bottom: 10px;
-  }
-
-  .search-container {
-      text-align: center;
-  }
-
-  /* Hacer que la tabla se ajuste bien en pantallas pequeñas */
-  table {
-      font-size: 0.9rem;
-      overflow-x: auto;
-  }
-
-  th, td {
-      padding: 8px;
-  }
+/* Contenedor principal del formulario */
+.form-container {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: center;
 }
 
-/* Para pantallas muy pequeñas (Teléfonos pequeños) */
-@media (max-width: 480px) {
-  h1 {
-      font-size: 1.5em;
+/* Alinear etiquetas e inputs */
+.form-container label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-container select,
+.form-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.form-container select:focus,
+.form-container input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Botón de registrar */
+.form-container button {
+  grid-column: span 2; /* El botón ocupa todo el ancho */
+  padding: 12px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.form-container button:hover {
+  background-color: #0056b3;
+}
+
+/* Contenedor de código de seguridad */
+.security-container {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 800px;
+  margin: 20px auto 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.security-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.security-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Diseño responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+  .form-container {
+    grid-template-columns: 1fr; /* Una sola columna en dispositivos pequeños */
   }
 
-  /* Mejorar la accesibilidad en botones */
-  button {
-      font-size: 0.8rem;
-      padding: 10px;
+  .form-container button {
+    grid-column: span 1;
+  }
+}
+/* Contenedor del historial de préstamos */
+.history-container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  overflow-x: auto; /* Scroll horizontal si es necesario */
+}
+
+/* Tabla */
+.history-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.history-container th,
+.history-container td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.history-container th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  color: #333;
+}
+
+.history-container td {
+  color: #555;
+}
+
+/* Alternar colores de filas */
+.history-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.history-container tr:hover {
+  background-color: #e6f7ff;
+  cursor: pointer;
+}
+
+/* Mensaje de error */
+#error-message {
+  margin-top: 15px;
+  font-size: 14px;
+  text-align: center;
+  display: none;
+}
+
+/* Input y etiquetas */
+.security-container,
+.search-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.security-container label,
+.search-container label {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.security-container input,
+.search-container input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .security-container,
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  /* Ajustar la búsqueda y el formulario */
+  .security-container input,
   .search-container input {
-      width: 90%;
+    margin-top: 10px;
   }
 
-  .form-container input, .form-container button {
-      font-size: 0.9rem;
-      width: 90%;
-      max-width: 250px;
+  .history-container table,
+  .history-container th,
+  .history-container td {
+    display: block;
+    width: 100%;
   }
 
-  /* Mejorar la tabla */
-  table {
-      font-size: 0.8rem;
-  }
-
-  td {
-      font-size: 0.9rem;
+  .history-container tr {
+    margin-bottom: 10px;
   }
 }

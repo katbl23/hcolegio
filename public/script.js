@@ -90,6 +90,8 @@ async function returnLoan(loanId) {
 async function addLoan() {
   const computerSelect = document.getElementById("computer");
   const usuario = document.getElementById("usuario").value;
+  const propietario = document.getElementById("propietario").value; // Obtener el valor del propietario
+  const ejePrestamo = document.getElementById("ejePrestamo").value;
   const computer = computerSelect.value; // Obtiene el valor del computador seleccionado
 
   // Verificar si los campos son vacíos
@@ -110,6 +112,8 @@ async function addLoan() {
   const loan = {
     computer: selectedComputer.name, // Usamos el nombre o ID según tu preferencia
     usuario: usuario,
+    propietario: propietario, // Agregar propietario
+    ejePrestamo: ejePrestamo, // Agregar eje gestor
     date: new Date().toISOString(),
     returned: false,
   };
