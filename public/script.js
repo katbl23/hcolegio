@@ -6,7 +6,7 @@ const serverUrl = "https://hcolegio.onrender.com/loans";
 let computers = Array.from({ length: 25 }, (_, i) => ({
   id: i + 1,
   name: `Computador ${i + 1}`,
-  isLoaned: false // Inicializa todos como no prestados
+  isLoaned: false // Inicializa todos como no prestatd
 }));
 
 // Función para llenar el desplegable de computadores con su estado (prestado o no)
