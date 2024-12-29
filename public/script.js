@@ -91,11 +91,11 @@ async function addLoan() {
   const computerSelect = document.getElementById("computer");
   const usuario = document.getElementById("usuario").value;
   const propietario = document.getElementById("propietario").value; // Obtener el valor del propietario
-  const ejePrestamo = document.getElementById("ejePrestamo").value;
+  const ejeprestamo = document.getElementById("ejeprestamo").value;
   const computer = computerSelect.value; // Obtiene el valor del computador seleccionado
 
   // Verificar si los campos son vacíos
-  if (!computer || !usuario || !propietario || !ejePrestamo) {
+  if (!computer || !usuario || !propietario || !ejeprestamo) {
     alert("Por favor, completa todos los campos.");
     return;
   }
@@ -113,7 +113,7 @@ async function addLoan() {
     computer: selectedComputer.name, // Usamos el nombre o ID según tu preferencia
     usuario: usuario,
     propietario: propietario, // Agregar propietario
-    ejePrestamo: ejePrestamo, // Agregar eje gestor
+    ejeprestamo: ejeprestamo, // Agregar eje gestor
     date: new Date().toISOString(),
     returned: false,
   };
@@ -538,8 +538,8 @@ function populateLoanTable(loans) {
       <td>${loan.date}</td>
       
       <td>${loan.returned ? "Devuelto" : "En préstamo"}</td>
-       <td>${loan.propietario}</td> <!-- Mostrar el propietario -->
-        <td>${loan.ejePrestamo}</td> <!-- Mostrar el eje de préstamo -->
+      <td>${loan.propietario}</td> <!-- Mostrar el propietario -->
+      <td>${loan.ejeprestamo}</td> <!-- Mostrar el eje de préstamo -->
       
       <td>
         ${!loan.returned ? `<button onclick="returnLoan(${loan.id})">Devolver</button>` : ""}
