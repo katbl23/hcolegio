@@ -95,7 +95,7 @@ async function addLoan() {
   const computer = computerSelect.value; // Obtiene el valor del computador seleccionado
 
   // Verificar si los campos son vacíos
-  if (!computer || !usuario) {
+  if (!computer || !usuario || !propietario || !ejePrestamo) {
     alert("Por favor, completa todos los campos.");
     return;
   }
@@ -535,6 +535,8 @@ function populateLoanTable(loans) {
       <td>${index + 1}</td>
       <td>${loan.computer}</td>
       <td>${loan.usuario}</td> <!-- Cambiado a "usuario" -->
+       <td>${loan.propietario}</td> <!-- Mostrar el propietario -->
+        <td>${loan.ejePrestamo}</td> <!-- Mostrar el eje de préstamo -->
       <td>${loan.date}</td>
       <td>${loan.returned ? "Devuelto" : "En préstamo"}</td>
       <td>
