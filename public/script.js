@@ -1,6 +1,8 @@
 // URL del servidor
 const serverUrl = "https://hcolegio.onrender.com/loans";
 
+
+
 let computers = Array.from({ length: 25 }, (_, i) => ({
   id: i + 1,
   name: `Computador ${i + 1}`,
@@ -90,9 +92,9 @@ async function returnLoan(loanId) {
 async function addLoan() {
   const computerSelect = document.getElementById("computer");
   const usuario = document.getElementById("usuario").value;
-  const propietario = document.getElementById("propietario").value; // Obtener el valor del propietario
-  const ejeprestamo = document.getElementById("ejeprestamo").value;
   const computer = computerSelect.value; // Obtiene el valor del computador seleccionado
+  const propietario = document.getElementById("propietario").value; // Obtener el valor del propietario
+  const ejeprestamo = document.getElementById("ejeprestamo").value; // Obtener el valor del propietario
 
   // Verificar si los campos son vacíos
   if (!computer || !usuario || !propietario || !ejeprestamo) {
